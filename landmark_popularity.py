@@ -42,10 +42,11 @@ scroll_id = response["_scroll_id"]
 while len(currentHits) > 0:
     Template(entityScrollApiBody).substitute(scroll_id=scroll_id)
     response = json.loads(main.post(entityInitialScrollApiUrl, entityInitialScrollApiBody).content)
+    print(response)
     currentHits = response['hits']['hits']
     landmarks.extend(currentHits)
     scroll_id = response["_scroll_id"]
-    print("total hits = " + len(landmarks))
+    print(len(landmarks))
 
 for landmark in landmarks:
     landmarkScores.append(landmark['_source']['s']['ID_ID']['p'])
