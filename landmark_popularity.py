@@ -27,12 +27,12 @@ partialUpdateApi = 'https://vpc-srsdata-entity-996037dbb77d-yzau6raclfxc3kgbxxvj
 entityInitialScrollApiUrl = 'https://vpc-srsdata-entity-996037dbb77d-yzau6raclfxc3kgbxxvjibwscm.ap-southeast-1.es.amazonaws' \
                             '.com/tvlk_entity_prod_read_alias/_search?scroll=10s'
 
-entityInitialScrollApiBody = '{"size": 1000,"query":{"match":{"pC":"LANDMARK"}},"sort":[{"s.ID_ID.p":{' \
+entityInitialScrollApiBody = '{"size": 500,"query":{"match":{"pC":"LANDMARK"}},"sort":[{"s.ID_ID.p":{' \
                       '"order":"desc"}}],"_source":{"includes":["id","s.ID_ID.p"],"excludes":[]}} '
 
 entityScrollApiUrl = 'https://vpc-srsdata-entity-996037dbb77d-yzau6raclfxc3kgbxxvjibwscm.ap-southeast-1.es.amazonaws' \
                             '.com/tvlk_entity_prod_read_alias/_search/scroll'
-entityScrollApiBody = '{"size": 1000,"scroll":"10s","scroll_id":"$scroll_id"}'
+entityScrollApiBody = '{"size": 500,"scroll":"10s","scroll_id":"$scroll_id"}'
 
 response = json.loads(main.post(entityInitialScrollApiUrl, entityInitialScrollApiBody).content)
 currentHits = response['hits']['hits']
@@ -41,7 +41,7 @@ scroll_id = response["_scroll_id"]
 
 while len(currentHits) > 0:
     Template(entityScrollApiBody).substitute(scroll_id=scroll_id)
-    response = json.loads(main.post(entityInitialScrollApiUrl, entityInitialScrollApiBody).content)
+    response = json.loads(main.post(entityScrollApiUrl, entityScrollApiBody).content)
     print(response)
     currentHits = response['hits']['hits']
     landmarks.extend(currentHits)
